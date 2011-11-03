@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 
 public class Main {
 
@@ -9,21 +11,27 @@ public class Main {
 		
 		String input = Keyboard.readString();		
 		String input_array[] = input.split(" ");
-		Board board = new Board();
+		Board board = new Board();		
 		int i = 0;
 		for (int x = 0; x < 3; x++){
 			for (int y = 0; y < 3; y++){
-				board.positions[x][y] = Integer.parseInt(input_array[i]);						
+				board.positions[x][y] = new Piece(Integer.parseInt(input_array[i]));
+				board.positions[x][y].refreshDistanceObjective(x, y);
 				i++;		
 			}
 				
 		}
+		
+		Vector<Piece> frontier = board.priorityPieces();
+		Vector explored = new Vector();
+		
+		
+		
 		Util.printBoard(board);
-		
-		
-		
-		
-		
+		for(int a =0; a < frontier.size(); a++){
+			System.out.println("Piece " + frontier.elementAt(a).id + ": " + frontier.elementAt(a).getCost());
+			
+		}
 
 	}
 
