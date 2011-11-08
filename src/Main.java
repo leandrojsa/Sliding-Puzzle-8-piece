@@ -11,27 +11,62 @@ public class Main {
 		
 		String input = Keyboard.readString();		
 		String input_array[] = input.split(" ");
-		Board board = new Board();		
+		Piece[][] positions = new Piece[3][3];
 		int i = 0;
 		for (int x = 0; x < 3; x++){
 			for (int y = 0; y < 3; y++){
-				board.positions[x][y] = new Piece(Integer.parseInt(input_array[i]));
-				board.positions[x][y].refreshDistanceObjective(x, y);
+				positions[x][y] = new Piece(Integer.parseInt(input_array[i]));
+				positions[x][y].refreshDistanceObjective(x, y);
 				i++;		
 			}
 				
 		}
+		Board board = new Board(positions);
+		Vector<Board> frontier = new Vector();
+		Vector<Board> explored = new Vector();
 		
-		Vector<Piece> frontier = board.priorityPieces();
-		Vector explored = new Vector();
+		Piece[][] objective = new Piece[3][3];
+		objective[0][0] = new Piece(1);
+		objective[0][0].refreshDistanceObjective(0, 0);
+		objective[0][1] = new Piece(2);
+		objective[0][0].refreshDistanceObjective(0, 1);
+		objective[0][2] = new Piece(3);
+		objective[0][0].refreshDistanceObjective(0, 2);
+		objective[1][0] = new Piece(4);
+		objective[0][0].refreshDistanceObjective(1, 0);
+		objective[1][1] = new Piece(5);
+		objective[0][0].refreshDistanceObjective(1, 1);
+		objective[1][2] = new Piece(6);
+		objective[0][0].refreshDistanceObjective(1, 2);
+		objective[2][0] = new Piece(7);
+		objective[0][0].refreshDistanceObjective(2, 0);
+		objective[2][1] = new Piece(8);
+		objective[0][0].refreshDistanceObjective(2, 1);
+		objective[2][2] = new Piece(0);
+		objective[0][0].refreshDistanceObjective(2, 2);
+		Board objectiveBoard = new Board(objective);
 		
+		
+		frontier.addElement(board);
+		
+		while (!frontier.isEmpty()){
+			Board currentBoard = frontier.remove(0);
+			
+			if (currentBoard == objectiveBoard){
+				Util.printBoard(currentBoard);
+				break;
+			}else{
+				explored.addElement(currentBoard);
+				
+				
+			}
+			
+			
+			
+		}
 		
 		
 		Util.printBoard(board);
-		for(int a =0; a < frontier.size(); a++){
-			System.out.println("Piece " + frontier.elementAt(a).id + ": " + frontier.elementAt(a).getCost());
-			
-		}
 
 	}
 

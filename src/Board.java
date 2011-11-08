@@ -4,11 +4,34 @@ import java.util.Vector;
 public class Board {
 	
 	public Piece positions[][];
+	public int functionG;
+	public int functionH;
+	public Board parent;
 	
-	public Board(){
+	public Board(Piece[][] positions){
 		
-		positions = new Piece[3][3];
+		positions = this.positions;
+		functionG = 0;
+		calculateFunctionH();
 		
+	}
+	
+	public Board(Piece[][] positions, Board parent){
+		
+		positions = this.positions;
+		parent = this.parent;
+		functionG = this.parent.functionG + 1;
+		calculateFunctionH();
+	}	
+	
+	private void calculateFunctionH(){
+		int functionH = 0;
+		for (int x = 0; x < 3; x++){
+			for (int y = 0; y < 3; y++){
+				functionH += this.positions[x][y].getCost();				
+			}
+		}
+		this.functionH = functionH;
 	}
 	
 	public Vector<Piece> priorityPieces(){
