@@ -10,27 +10,34 @@ public class Board {
 	
 	public Board(Piece[][] positions){
 		
-		positions = this.positions;
-		functionG = 0;
-		calculateFunctionH();
+	
+		this.positions = positions;
+		this.functionG = 0;
+		this.calculateFunctionH();
 		
 	}
 	
 	public Board(Piece[][] positions, Board parent){
 		
-		positions = this.positions;
-		parent = this.parent;
-		functionG = this.parent.functionG + 1;
-		calculateFunctionH();
-	}	
+		this.positions = positions;
+		this.parent = parent;
+		this.functionG = this.parent.functionG + 1;
+		this.calculateFunctionH();
+	}
 	
-	private void calculateFunctionH(){
+	public int getCost(){
+		return this.functionG + this.functionH;		
+	}
+	
+	public void calculateFunctionH(){
 		int functionH = 0;
+		
 		for (int x = 0; x < 3; x++){
 			for (int y = 0; y < 3; y++){
-				functionH += this.positions[x][y].getCost();				
+				functionH += this.positions[x][y].distanceObjective;				
 			}
 		}
+		
 		this.functionH = functionH;
 	}
 	
@@ -58,6 +65,117 @@ public class Board {
 			}
 		}
 		return frontier;
+		
+	}
+	
+	public Board moveTop(){
+		
+		Piece piece = null;
+		Board newBoard = this;
+		int i = 0;
+		int j = 0;
+		for (int x = 0; x < 3; x++){
+			for (int y = 0; y < 3; y++){
+				if (newBoard.positions[x][y].id == 0){
+					piece = newBoard.positions[x][y];
+					i = x;
+					j = y;
+					
+				}
+			}
+		}
+		
+		if (i > 0){
+			newBoard.positions[i][j] = newBoard.positions[i-1][j];
+			newBoard.positions[i-1][j] = piece;
+			
+			newBoard.positions[i][j].refreshDistanceObjective(i, j);
+			newBoard.positions[i-1][j].refreshDistanceObjective(i-1, j);
+			newBoard.calculateFunctionH();
+		}
+		return newBoard;	
+		
+	}
+	
+	public Board moveBottom(){
+		
+		Piece piece = null;
+		Board newBoard = this;
+		int i = 0;
+		int j = 0;
+		for (int x = 0; x < 3; x++){
+			for (int y = 0; y < 3; y++){
+				if (newBoard.positions[x][y].id == 0){
+					piece = newBoard.positions[x][y];
+					i = x;
+					j = y;		
+				}
+			}
+		}
+		if (i < 2){
+			newBoard.positions[i][j] = newBoard.positions[i+1][j];
+			newBoard.positions[i+1][j] = piece;
+			
+			newBoard.positions[i][j].refreshDistanceObjective(i, j);
+			newBoard.positions[i+1][j].refreshDistanceObjective(i+1, j);
+			newBoard.calculateFunctionH();
+		}
+		return newBoard;	
+		
+	}
+	
+	public Board moveRight(){
+		
+		Piece piece = null;
+		Board newBoard = this;
+		int i = 0;
+		int j = 0;
+		for (int x = 0; x < 3; x++){
+			for (int y = 0; y < 3; y++){
+				if (newBoard.positions[x][y].id == 0){
+					piece = newBoard.positions[x][y];
+					i = x;
+					j = y;
+				}
+			}
+		}
+		if (j < 2){
+			newBoard.positions[i][j] = newBoard.positions[i][j+1];
+			newBoard.positions[i][j+1] = piece;
+			
+			newBoard.positions[i][j].refreshDistanceObjective(i, j);
+			newBoard.positions[i][j+1].refreshDistanceObjective(i, j+1);
+			newBoard.calculateFunctionH();
+			
+		}
+		return newBoard;	
+		
+	}
+		
+	public Board moveLeft(){
+		
+		Piece piece = null;
+		Board newBoard = this;
+		int i = 0;
+		int j = 0;
+		for (int x = 0; x < 3; x++){
+			for (int y = 0; y < 3; y++){
+				if (newBoard.positions[x][y].id == 0){
+					piece = newBoard.positions[x][y];
+					i = x;
+					j = y;
+				}
+			}
+		}
+		if (j > 0){
+			newBoard.positions[i][j] = newBoard.positions[i][j-1];
+			newBoard.positions[i][j-1] = piece;
+			
+			newBoard.positions[i][j].refreshDistanceObjective(i, j);
+			newBoard.positions[i][j-1].refreshDistanceObjective(i, j-1);
+			newBoard.calculateFunctionH();
+		}
+		return newBoard;	
 		
 	}
 

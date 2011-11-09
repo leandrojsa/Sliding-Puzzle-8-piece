@@ -3,20 +3,16 @@ public class Piece {
 	
 	public int id;
 	public int distanceObjective;
-	public int distanceStart;
 	
 	public Piece(int id){
 		
 		this.id = id;
-		this.distanceStart = 0;
 		this.distanceObjective = -1;
 		
 	}
 	
 	public int getCost(){
-		
-		return this.distanceStart + this.distanceObjective;
-		
+		return this.distanceObjective;
 	}
 	
 	public void refreshDistanceObjective(int boardPositionX, int boardPositionY){

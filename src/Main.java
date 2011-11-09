@@ -2,7 +2,7 @@ import java.util.Vector;
 
 
 public class Main {
-
+	
 	
 	public static void main(String[] args) {
 		
@@ -21,9 +21,10 @@ public class Main {
 			}
 				
 		}
+		
 		Board board = new Board(positions);
-		Vector<Board> frontier = new Vector();
-		Vector<Board> explored = new Vector();
+		Vector<Board> frontier = new Vector<Board>();
+		Vector<Board> explored = new Vector<Board>();
 		
 		Piece[][] objective = new Piece[3][3];
 		objective[0][0] = new Piece(1);
@@ -48,26 +49,63 @@ public class Main {
 		
 		
 		frontier.addElement(board);
-		
+		int bla = 1;
 		while (!frontier.isEmpty()){
 			Board currentBoard = frontier.remove(0);
+			System.out.println("frontier: " + frontier.size());
+			System.out.println("cost: " + currentBoard.getCost());
+			Util.printBoard(currentBoard);
 			
 			if (currentBoard == objectiveBoard){
 				Util.printBoard(currentBoard);
-				break;
+				return;
 			}else{
+				if(bla == 0)
+					return;
 				explored.addElement(currentBoard);
+				Board tmpBoard;
 				
+				/*tmpBoard = currentBoard.moveTop();
+				if(explored.contains(tmpBoard)){
+					System.out.println("top");
+					insertFrontier(tmpBoard, frontier);
+				}
+				tmpBoard = currentBoard.moveBottom();
+				if(explored.contains(tmpBoard)){
+					System.out.println("down");
+					insertFrontier(tmpBoard, frontier);
+				}*/
+				tmpBoard = currentBoard.moveRight();
+				if(explored.contains(tmpBoard)){
+					insertFrontier(tmpBoard, frontier);
+				}/*
+				tmpBoard = currentBoard.moveLeft();
+				if(explored.contains(tmpBoard)){
+					insertFrontier(tmpBoard, frontier);
+				}*/
 				
 			}
-			
-			
-			
+			bla--;
 		}
 		
 		
-		Util.printBoard(board);
+		
 
+	}
+	
+	public static void insertFrontier(Board board, Vector<Board> frontier){
+		
+		int i = 0;
+		
+		for(i = 0;i < frontier.size(); i++){
+			if(frontier.get(i).getCost() > board.getCost()){
+				frontier.add(i, board);
+				return;
+			}
+		}
+		frontier.add(i, board);
+		return;
+		
 	}
 
 }
