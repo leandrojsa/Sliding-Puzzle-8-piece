@@ -1,10 +1,11 @@
+import java.util.Collections;
 import java.util.Vector;
 
 
 public class Main {
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws CloneNotSupportedException {
 		
 		System.out.println("Heuristic Solution for Sliding Puzzle - 8 piece\n\n");
 		System.out.println("Enter with pieces separate for one space (Ex: 7 8 6 0 4 2 1 3 5):");
@@ -49,48 +50,86 @@ public class Main {
 		
 		
 		frontier.addElement(board);
-		int bla = 1;
 		while (!frontier.isEmpty()){
+			System.out.println("Explored: " + explored.size());
 			Board currentBoard = frontier.remove(0);
 			System.out.println("frontier: " + frontier.size());
-			System.out.println("cost: " + currentBoard.getCost());
-			Util.printBoard(currentBoard);
+			//System.out.println("cost: " + currentBoard.getCost());
+			//Util.printBoard(currentBoard);
 			
-			if (currentBoard == objectiveBoard){
+			if (Util.cmpBoard(currentBoard, objectiveBoard)){
 				Util.printBoard(currentBoard);
+				Vector<Board> steps = new Vector<Board>();
+				
+				while(currentBoard.parent != null){
+					steps.add(currentBoard);
+					currentBoard = currentBoard.parent;
+				}
+				Collections.reverse(steps);
+				printFrontier(steps);
+				System.out.println("Steps: " + steps.size());						
 				return;
 			}else{
-				if(bla == 0)
-					return;
-				explored.addElement(currentBoard);
-				Board tmpBoard;
 				
-				/*tmpBoard = currentBoard.moveTop();
-				if(explored.contains(tmpBoard)){
-					System.out.println("top");
+				explored.addElement(currentBoard);
+				
+				Board tmpBoard;
+				int indexExplored, indexFrontier;
+				
+				tmpBoard = currentBoard.moveTop();
+				indexExplored = Util.findBoard(explored, tmpBoard);
+				indexFrontier = Util.findBoard(frontier, tmpBoard);
+				if(indexExplored == -1 && indexFrontier == -1 ){
+					insertFrontier(tmpBoard, frontier);
+				}else if(indexFrontier >= 0 && frontier.get(indexFrontier).getCost() > tmpBoard.getCost()){
+					frontier.remove(indexFrontier);
 					insertFrontier(tmpBoard, frontier);
 				}
+				
 				tmpBoard = currentBoard.moveBottom();
-				if(explored.contains(tmpBoard)){
-					System.out.println("down");
+				indexExplored = Util.findBoard(explored, tmpBoard);
+				indexFrontier = Util.findBoard(frontier, tmpBoard);
+				if(indexExplored == -1 && indexFrontier == -1 ){
 					insertFrontier(tmpBoard, frontier);
-				}*/
+				}else if(indexFrontier >= 0 && frontier.get(indexFrontier).getCost() > tmpBoard.getCost()){
+					frontier.remove(indexFrontier);
+					insertFrontier(tmpBoard, frontier);
+				}
+				
 				tmpBoard = currentBoard.moveRight();
-				if(explored.contains(tmpBoard)){
+				indexExplored = Util.findBoard(explored, tmpBoard);
+				indexFrontier = Util.findBoard(frontier, tmpBoard);
+				if(indexExplored == -1 && indexFrontier == -1 ){
 					insertFrontier(tmpBoard, frontier);
-				}/*
+				}else if(indexFrontier >= 0 && frontier.get(indexFrontier).getCost() > tmpBoard.getCost()){
+					frontier.remove(indexFrontier);
+					insertFrontier(tmpBoard, frontier);
+				}
+				
 				tmpBoard = currentBoard.moveLeft();
-				if(explored.contains(tmpBoard)){
+				indexExplored = Util.findBoard(explored, tmpBoard);
+				indexFrontier = Util.findBoard(frontier, tmpBoard);
+				if(indexExplored == -1 && indexFrontier == -1 ){
 					insertFrontier(tmpBoard, frontier);
-				}*/
+				}else if(indexFrontier >= 0 && frontier.get(indexFrontier).getCost() > tmpBoard.getCost()){
+					frontier.remove(indexFrontier);
+					insertFrontier(tmpBoard, frontier);
+				}
 				
 			}
-			bla--;
 		}
 		
 		
 		
 
+	}
+	
+	public static void printFrontier(Vector<Board> frontier){
+		System.out.println("FRONTIER");
+		for(int i=0;i < frontier.size();i++){
+			Util.printBoard(frontier.elementAt(i));
+		}
+		System.out.println("END");
 	}
 	
 	public static void insertFrontier(Board board, Vector<Board> frontier){

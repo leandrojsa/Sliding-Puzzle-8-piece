@@ -1,7 +1,7 @@
 import java.util.Vector;
 
 
-public class Board {
+public class Board implements Cloneable{
 	
 	public Piece positions[][];
 	public int functionG;
@@ -10,7 +10,7 @@ public class Board {
 	
 	public Board(Piece[][] positions){
 		
-	
+		this.parent = null;
 		this.positions = positions;
 		this.functionG = 0;
 		this.calculateFunctionH();
@@ -24,6 +24,25 @@ public class Board {
 		this.functionG = this.parent.functionG + 1;
 		this.calculateFunctionH();
 	}
+	@Override 
+	public Board clone() throws CloneNotSupportedException { 
+		
+		Board clone = (Board) super.clone();
+		clone.positions = new Piece[3][3];
+		for (int x = 0; x < 3; x++){
+			for (int y = 0; y < 3; y++){
+				clone.positions[x][y] = positions[x][y].clone();
+			}
+		}
+		
+		if (parent != null){
+			clone.parent = parent.clone();
+		}else{
+			clone.parent = null;			
+		}
+		
+        return clone;  
+    }
 	
 	public int getCost(){
 		return this.functionG + this.functionH;		
@@ -68,39 +87,47 @@ public class Board {
 		
 	}
 	
-	public Board moveTop(){
-		
+	public Board moveTop() throws CloneNotSupportedException{
 		Piece piece = null;
-		Board newBoard = this;
+		Board newBoard = null;
+		newBoard = this.clone();
+		newBoard.parent = this;
+		newBoard.functionG = this.functionG + 1;
 		int i = 0;
 		int j = 0;
 		for (int x = 0; x < 3; x++){
 			for (int y = 0; y < 3; y++){
 				if (newBoard.positions[x][y].id == 0){
-					piece = newBoard.positions[x][y];
+					piece = newBoard.positions[x][y].clone();
 					i = x;
 					j = y;
 					
 				}
 			}
 		}
-		
+
 		if (i > 0){
+		
 			newBoard.positions[i][j] = newBoard.positions[i-1][j];
 			newBoard.positions[i-1][j] = piece;
 			
 			newBoard.positions[i][j].refreshDistanceObjective(i, j);
 			newBoard.positions[i-1][j].refreshDistanceObjective(i-1, j);
 			newBoard.calculateFunctionH();
+
 		}
 		return newBoard;	
 		
 	}
 	
-	public Board moveBottom(){
+
+	public Board moveBottom() throws CloneNotSupportedException{
 		
 		Piece piece = null;
-		Board newBoard = this;
+		Board newBoard = null;
+		newBoard = this.clone();
+		newBoard.parent = this;
+		newBoard.functionG = this.functionG + 1;
 		int i = 0;
 		int j = 0;
 		for (int x = 0; x < 3; x++){
@@ -124,10 +151,13 @@ public class Board {
 		
 	}
 	
-	public Board moveRight(){
+	public Board moveRight() throws CloneNotSupportedException{
 		
 		Piece piece = null;
-		Board newBoard = this;
+		Board newBoard = null;
+		newBoard = this.clone();
+		newBoard.parent = this;
+		newBoard.functionG = this.functionG + 1;
 		int i = 0;
 		int j = 0;
 		for (int x = 0; x < 3; x++){
@@ -152,10 +182,13 @@ public class Board {
 		
 	}
 		
-	public Board moveLeft(){
+	public Board moveLeft() throws CloneNotSupportedException{
 		
 		Piece piece = null;
-		Board newBoard = this;
+		Board newBoard = null;
+		newBoard = this.clone();
+		newBoard.parent = this;
+		newBoard.functionG = this.functionG + 1;
 		int i = 0;
 		int j = 0;
 		for (int x = 0; x < 3; x++){

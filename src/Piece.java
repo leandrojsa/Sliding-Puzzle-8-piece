@@ -1,5 +1,5 @@
 
-public class Piece {
+public class Piece implements Cloneable{
 	
 	public int id;
 	public int distanceObjective;
@@ -10,6 +10,11 @@ public class Piece {
 		this.distanceObjective = -1;
 		
 	}
+	
+	@Override 
+	public Piece clone() throws CloneNotSupportedException {  
+        return (Piece) super.clone();  
+    }
 	
 	public int getCost(){
 		return this.distanceObjective;
