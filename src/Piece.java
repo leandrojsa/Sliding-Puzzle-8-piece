@@ -27,40 +27,40 @@ public class Piece implements Cloneable{
 		
 		switch (this.id) {
 		case 0:
-			posX = 2;
-			posY = 2;
+			posX = 0;
+			posY = 0;
 			break;
 		case 1:
 			posX = 0;
-			posY = 0;
+			posY = 1;
 			break;
 		case 2:
 			posX = 0;
-			posY = 1;
+			posY = 2;
 			break;
 		case 3:
-			posX = 0;
-			posY = 2;
+			posX = 1;
+			posY = 0;
 			break;
 		case 4:
 			posX = 1;
-			posY = 0;
+			posY = 1;
 			break;
 		case 5:
 			posX = 1;
-			posY = 1;
-			break;
-		case 6:
-			posX = 1;
 			posY = 2;
 			break;
-		case 7:
+		case 6:
 			posX = 2;
 			posY = 0;
 			break;
-		case 8:
+		case 7:
 			posX = 2;
 			posY = 1;
+			break;
+		case 8:
+			posX = 2;
+			posY = 2;
 			break;
 		}
 		this.distanceObjective = Math.abs(posX - boardPositionX) + Math.abs(posY - boardPositionY); 
